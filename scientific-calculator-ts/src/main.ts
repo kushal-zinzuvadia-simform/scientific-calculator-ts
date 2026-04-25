@@ -1,5 +1,5 @@
 import './style.css'
-// import { Calculator } from "./Calculator.js";
+import { Calculator } from "./calculator.ts";
 
 const scrollAmount = 30;
 
@@ -9,7 +9,7 @@ const historyToggleBtn = document.getElementById("historyToggle");
 const historySidebar = document.getElementById("history-panel");
 const clearHistoryBtn = document.getElementById("clearHistory");
 
-// const calculator = new Calculator(display, historyPanel);
+const calculator = new Calculator(display, historyPanel);
 
 let outer2ndActive = false;
 const outer2ndBtn = document.getElementById("outer-2nd-btn");
@@ -32,24 +32,24 @@ const funcDropdownContent = document.getElementById("func-dropdown-content");
 const modeBtn = document.getElementById("mode-btn");
 const feBtn = document.getElementById("fe-btn");
 
-// calculator.updateHistoryPanel();
+calculator.updateHistoryPanel();
 
 // Make display focusable
 display.contentEditable = "false";
 display.tabIndex = 0;
 
 modeBtn.addEventListener("click", () => {
-  // const isDeg = calculator.mode === "DEG";
+  const isDeg = calculator.mode === "DEG";
 
-  // calculator.mode = isDeg ? "RAD" : "DEG";
-  // modeBtn.textContent = calculator.mode;
+  calculator.mode = isDeg ? "RAD" : "DEG";
+  modeBtn.textContent = calculator.mode;
 
-  // modeBtn.classList.toggle("active-mode", calculator.mode === "RAD");
+  modeBtn.classList.toggle("active-mode", calculator.mode === "RAD");
 });
 
 feBtn.addEventListener("click", () => {
-  // calculator.toggleExponential();
-  // feBtn.classList.toggle("active-mode", calculator.isExponential);
+  calculator.toggleExponential();
+  feBtn.classList.toggle("active-mode", calculator.isExponential);
 });
 
 // History toggle
@@ -60,7 +60,7 @@ historyToggleBtn.addEventListener("click", () => {
 // Clear history
 clearHistoryBtn.addEventListener("click", (e) => {
   e.stopPropagation();
-  // calculator.clearHistory();
+  calculator.clearHistory();
 });
 
 outer2ndBtn.addEventListener("click", (e) => {
@@ -132,86 +132,86 @@ document.body.addEventListener("click", (e) => {
   let value = btn.innerText;
 
   if (value === "=") {
-    // calculator.calculate();
+    calculator.calculate();
     display.focus();
   } else if (value === "C") {
-    // calculator.clear();
+    calculator.clear();
   } else if (value === "MS" || value === "MR" || value === "M+" || value === "M-" || value === "MC") {
-    // calculator.handleMemory(value);
+    calculator.handleMemory(value);
   }
   else if (btn.getAttribute("aria-label") === "Backspace") {
-    // calculator.delete();
+    calculator.delete();
 
   } else if (btn.id === "square-btn") {
     if (outer2ndActive) {
-      // calculator.applyCube();
+      calculator.applyCube();
     } else {
-      // calculator.applySquare();
+      calculator.applySquare();
     }
 
   } else if (btn.id === "sqrt-btn") {
     if (outer2ndActive) {
-      // calculator.applyCubeRoot();
+      calculator.applyCubeRoot();
     } else {
-      // calculator.applySquareRoot();
+      calculator.applySquareRoot();
     }
 
   } else if (btn.id === "power-btn") {
     if (outer2ndActive) {
-      // calculator.applyTwoPower();
+      calculator.applyTwoPower();
     } else {
-      // calculator.applyTenPower();
+      calculator.applyTenPower();
     }
 
   } else if (value === "xʸ") {
-    // calculator.applyPower();
+    calculator.applyPower();
   } else if (value === "1/x") {
-    // calculator.applyReciprocal();
+    calculator.applyReciprocal();
   } else if (value === "|x|") {
-    // calculator.applyAbsolute();
+    calculator.applyAbsolute();
   } else if (value === "n!") {
-    // calculator.applyFactorial();
+    calculator.applyFactorial();
   } else if (value === "log") {
-    // calculator.applyLog10();
+    calculator.applyLog10();
   } else if (value === "ln") {
-    // calculator.applyLn();
+    calculator.applyLn();
   } else if (value === "exp") {
-    // calculator.applyExp();
+    calculator.applyExp();
   } else if (value === "+/-") {
-    // calculator.applyNegate();
+    calculator.applyNegate();
   } else if (btn.id === "sin-btn") {
     if (trig2ndActive) {
-      // calculator.applyAsin();
+      calculator.applyAsin();
     } else {
-      // calculator.applySin();
+      calculator.applySin();
     }
   } else if (btn.id === "cos-btn") {
     if (trig2ndActive) {
-      // calculator.applyAcos();
+      calculator.applyAcos();
     } else {
-      // calculator.applyCos();
+      calculator.applyCos();
     }
   } else if (btn.id === "tan-btn") {
     if (trig2ndActive) {
-      // calculator.applyAtan();
+      calculator.applyAtan();
     } else {
-      // calculator.applyTan();
+      calculator.applyTan();
     }
 
   } else if (value === "⌊x⌋") {
-    // calculator.applyFloor();
+    calculator.applyFloor();
   } else if (value === "⌈x⌉") {
-    // calculator.applyCeil();
+    calculator.applyCeil();
   } else if (value === "rand") {
-    // calculator.applyRand();
+    calculator.applyRand();
   } else if (value === "round") {
-    // calculator.applyRound();
+    calculator.applyRound();
 
   } else {
     if (value === "mod") {
       value = "%";
     }
-    // calculator.append(value);
+    calculator.append(value);
   }
 });
 
@@ -223,59 +223,59 @@ document.addEventListener("keydown", (e) => {
 
   // Handle modulo 
   if (key === "%") {
-    // calculator.append("%");
+    calculator.append("%");
     e.preventDefault();
     return;
   }
 
   if (key >= "0" && key <= "9") {
-    // calculator.append(key);
+    calculator.append(key);
     e.preventDefault();
   }
 
   else if (key === ".") {
-    // calculator.append(".");
+    calculator.append(".");
     e.preventDefault();
   }
 
   else if (key === "+") {
-    // calculator.append("+");
+    calculator.append("+");
     e.preventDefault();
   }
   else if (key === "-") {
-    // calculator.append("-");
+    calculator.append("-");
     e.preventDefault();
   }
   else if (key === "*") {
-    // calculator.append("×");
+    calculator.append("×");
     e.preventDefault();
   }
   else if (key === "/") {
-    // calculator.append("÷");
+    calculator.append("÷");
     e.preventDefault();
   }
   else if (key === "!") {
-    // calculator.append("!");
+    calculator.append("!");
     e.preventDefault();
   }
   else if (key === "^") {
-    // calculator.append("^");
+    calculator.append("^");
     e.preventDefault();
   }
 
   else if (key === "Enter" || key === "=") {
-    // calculator.calculate();
+    calculator.calculate();
     display.focus();
     e.preventDefault();
   }
 
   else if (key === "Escape") {
-    // calculator.clear();
+    calculator.clear();
     e.preventDefault();
   }
 
   else if (key === "Backspace") {
-    // calculator.delete();
+    calculator.delete();
     e.preventDefault();
   }
   // Arrow Keys for scrolling result
@@ -286,7 +286,7 @@ document.addEventListener("keydown", (e) => {
 });
 
 // Handle result scrolling with arrow keys
-function handleResultScroll(direction) {
+function handleResultScroll(direction: "ArrowLeft" | "ArrowRight") {
 
   if (direction === "ArrowLeft") {
     display.scrollLeft -= scrollAmount;
