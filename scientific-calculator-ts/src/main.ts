@@ -3,34 +3,34 @@ import { Calculator } from "./calculator.ts";
 
 const scrollAmount = 30;
 
-const display = document.getElementById("result-display");
-const historyPanel = document.getElementById("history-items");
-const historyToggleBtn = document.getElementById("historyToggle");
-const historySidebar = document.getElementById("history-panel");
-const clearHistoryBtn = document.getElementById("clearHistory");
+const display = document.getElementById("result-display") as HTMLElement;
+const historyPanel = document.getElementById("history-items") as HTMLElement;
+const historyToggleBtn = document.getElementById("historyToggle") as HTMLElement;
+const historySidebar = document.getElementById("history-panel") as HTMLElement;
+const clearHistoryBtn = document.getElementById("clearHistory") as HTMLElement;
 
 const calculator = new Calculator(display, historyPanel);
 
 let outer2ndActive = false;
-const outer2ndBtn = document.getElementById("outer-2nd-btn");
-const squareBtn = document.getElementById("square-btn");
-const sqrtBtn = document.getElementById("sqrt-btn");
-const powerBtn = document.getElementById("power-btn");
+const outer2ndBtn = document.getElementById("outer-2nd-btn") as HTMLElement;
+const squareBtn = document.getElementById("square-btn") as HTMLElement;
+const sqrtBtn = document.getElementById("sqrt-btn") as HTMLElement;
+const powerBtn = document.getElementById("power-btn") as HTMLElement;
 
 let trig2ndActive = false;
-const trig2ndBtn = document.getElementById("trig-2nd-btn");
-const sinBtn = document.getElementById("sin-btn");
-const cosBtn = document.getElementById("cos-btn");
-const tanBtn = document.getElementById("tan-btn");
+const trig2ndBtn = document.getElementById("trig-2nd-btn") as HTMLElement;
+const sinBtn = document.getElementById("sin-btn") as HTMLElement;
+const cosBtn = document.getElementById("cos-btn") as HTMLElement;
+const tanBtn = document.getElementById("tan-btn") as HTMLElement;
 
 // Dropdown JS toggle
-const trigDropdownBtn = document.getElementById("trig-dropdown-btn");
-const trigDropdownContent = document.getElementById("trig-dropdown-content");
-const funcDropdownBtn = document.getElementById("func-dropdown-btn");
-const funcDropdownContent = document.getElementById("func-dropdown-content");
+const trigDropdownBtn = document.getElementById("trig-dropdown-btn") as HTMLElement;
+const trigDropdownContent = document.getElementById("trig-dropdown-content") as HTMLElement;
+const funcDropdownBtn = document.getElementById("func-dropdown-btn") as HTMLElement;
+const funcDropdownContent = document.getElementById("func-dropdown-content") as HTMLElement;
 
-const modeBtn = document.getElementById("mode-btn");
-const feBtn = document.getElementById("fe-btn");
+const modeBtn = document.getElementById("mode-btn") as HTMLElement;
+const feBtn = document.getElementById("fe-btn") as HTMLElement;
 
 calculator.updateHistoryPanel();
 

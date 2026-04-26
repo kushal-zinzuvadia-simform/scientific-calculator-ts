@@ -22,12 +22,15 @@ export class Expression {
         // (π|e)       match pi and e constants
         const tokens = expr.match(/(\d+\.?\d*|ln|log|√|abs|sin|cos|tan|asin|acos|atan|floor|ceil|round|∛|[+\-*/%()^!]|π|e|10\^|1\/)/g);
 
+        if (!tokens) {
+            throw new Error("Invalid expression: no valid tokens found");
+        }
+
         // Process tokens to identify unary minus
         return this.processUnaryMinus(tokens);
     }
 
     processUnaryMinus(tokens: string[]) {
-        if (!tokens) return tokens;
 
         // handle implicit multiplication
         const withImplicitMult: string[] = [];
