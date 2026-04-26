@@ -1,4 +1,6 @@
 export class Expression {
+    private static readonly PREFIX_FUNCTIONS = ["ln", "log", "√", "abs", "sin", "cos", "tan", "asin", "acos", "atan", "floor", "ceil", "round", "∛"];
+
     tokenize(expr: string) {
         // Check for multiple decimal points in a single number (1.2.3)
         if (/\d+\.\d*\./.test(expr)) {
@@ -101,7 +103,7 @@ export class Expression {
     toPostfix(tokens: string[]): string[] {
         const output: string[] = [];
         const stack: string[] = [];
-        const prefixFunctions = ["ln", "log", "√", "abs", "sin", "cos", "tan", "asin", "acos", "atan", "floor", "ceil", "round", "∛"];
+        const prefixFunctions = Expression.PREFIX_FUNCTIONS;
 
         for (const token of tokens) {
             if (!isNaN(Number(token))) {
@@ -136,11 +138,11 @@ export class Expression {
                 stack.push(token);
             }
 
-            else if (token == "(") {
+            else if (token === "(") {
                 stack.push(token);
             }
 
-            else if (token == ")") {
+            else if (token === ")") {
                 while (stack.length && stack.at(-1) !== "(") {
                     output.push(stack.pop()!);
                 }
@@ -162,7 +164,7 @@ export class Expression {
 
     evaluatePostfix(postfix: string[], mode: string): number {
         const stack: number[] = [];
-        const prefixFunctions = ["ln", "log", "√", "abs", "sin", "cos", "tan", "asin", "acos", "atan", "floor", "ceil", "round", "∛"];
+        const prefixFunctions = Expression.PREFIX_FUNCTIONS;
 
         postfix.forEach(token => {
             if (!isNaN(Number(token))) {

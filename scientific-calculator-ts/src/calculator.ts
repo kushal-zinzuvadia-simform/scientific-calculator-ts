@@ -4,15 +4,15 @@ import { History } from "./history.ts";
 type CalculatorMode = "DEG" | "RAD";
 
 export class Calculator {
-    display: HTMLElement;
-    historyPanel: HTMLElement;
-    expression: Expression;
-    history: History;
-    justCalculated: boolean;
-    hasError: boolean;
-    memory: number;
-    mode: CalculatorMode;
-    isExponential: boolean;
+    private display: HTMLElement;
+    private historyPanel: HTMLElement;
+    private expression: Expression;
+    private history: History;
+    private justCalculated: boolean;
+    private hasError: boolean;
+    public memory: number;
+    public mode: CalculatorMode;
+    public isExponential: boolean;
 
     constructor(displayElement: HTMLElement, historyPanel: HTMLElement) {
         this.display = displayElement;
@@ -31,24 +31,24 @@ export class Calculator {
         return this.display.textContent ?? "0";
     }
 
-    getCurrentValue(): number {
+    private getCurrentValue(): number {
         const text = this.getDisplayText();
         return parseFloat(text) || 0;
     }
 
-    updateDisplay(text: string): void {
+    private updateDisplay(text: string): void {
         this.display.textContent = text;
     }
 
-    isStartOfNewEntry(value: string): boolean {
+    private isStartOfNewEntry(value: string): boolean {
         return /^[0-9.]$/.test(value) || value === "π" || value === "e";
     }
 
-    isOperator(value: string): boolean {
+    private isOperator(value: string): boolean {
         return ["+", "-", "×", "÷", "%", "!"].includes(value);
     }
 
-    clearIfError(): boolean {
+    private clearIfError(): boolean {
         if (this.hasError) {
             this.updateDisplay("0");
             this.hasError = false;
@@ -184,7 +184,7 @@ export class Calculator {
         return parseFloat(value.toFixed(6)).toString();
     }
 
-    evaluateCurrentExpression(): number {
+    private evaluateCurrentExpression(): number {
         const input = this.getDisplayText().trim();
         const result = this.expression.evaluate(input, this.mode);
         if (isNaN(result) || !isFinite(result)) {
@@ -266,7 +266,7 @@ export class Calculator {
     }
 
     // Common function for unary operations
-    applyUnaryFunction(format: string): void {
+    private applyUnaryFunction(format: string): void {
         if (this.hasError) return;
 
         const expr = this.getDisplayText();
@@ -293,7 +293,7 @@ export class Calculator {
         this.justCalculated = false;
     }
 
-    appendToExpression(suffix: string): void {
+    private appendToExpression(suffix: string): void {
         if (this.hasError) return;
         const expr = this.getDisplayText();
         const lastChar = expr[expr.length - 1];
