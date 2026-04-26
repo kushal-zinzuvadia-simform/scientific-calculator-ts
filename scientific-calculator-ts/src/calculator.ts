@@ -1,11 +1,11 @@
 import { Expression } from "./expression.ts";
-// import { History } from "./History.ts";
+import { History } from "./history.ts";
 
 export class Calculator {
     display: HTMLElement;
     historyPanel: HTMLElement;
     expression: Expression;
-    // history: History;
+    history: History;
     justCalculated: boolean;
     hasError: boolean;
     memory: number;
@@ -16,7 +16,7 @@ export class Calculator {
         this.display = displayElement;
         this.historyPanel = historyPanel;
         this.expression = new Expression();
-        // this.history = new History();
+        this.history = new History();
         this.justCalculated = false;
         this.hasError = false;
         this.memory = 0;
@@ -190,7 +190,7 @@ export class Calculator {
         if (this.hasError) return;
 
         try {
-            // let input = this.display.textContent.trim();
+            let input = this.display.textContent.trim();
             const result = this.evaluateCurrentExpression();
 
             if (isNaN(result) || !isFinite(result)) {
@@ -206,7 +206,7 @@ export class Calculator {
             this.justCalculated = true;
 
             // Add to history
-            // this.history.add(input, formattedResult);
+            this.history.add(input, Number(formattedResult));
             this.updateHistoryPanel();
         } catch (err) {
             this.updateDisplay("Invalid expression");
@@ -218,43 +218,43 @@ export class Calculator {
     updateHistoryPanel() {
         if (!this.historyPanel) return;
 
-        // const items = this.history.getAll();
+        const items = this.history.getAll();
         this.historyPanel.replaceChildren();
 
-        // if (items.length === 0) {
-        //     const emptyDiv = document.createElement('div');
-        //     emptyDiv.className = 'history-empty';
-        //     emptyDiv.textContent = 'History is empty';
-        //     this.historyPanel.appendChild(emptyDiv);
-        //     return;
-        // }
+        if (items.length === 0) {
+            const emptyDiv = document.createElement('div');
+            emptyDiv.className = 'history-empty';
+            emptyDiv.textContent = 'History is empty';
+            this.historyPanel.appendChild(emptyDiv);
+            return;
+        }
 
-        // items.forEach(item => {
-        //     const historyItem = document.createElement('div');
-        //     historyItem.className = 'history-item';
+        items.forEach(item => {
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
 
-        //     const expressionDiv = document.createElement('div');
-        //     expressionDiv.className = 'history-expression';
-        //     expressionDiv.textContent = item.expression;
+            const expressionDiv = document.createElement('div');
+            expressionDiv.className = 'history-expression';
+            expressionDiv.textContent = item.expression;
 
-        //     const resultDiv = document.createElement('div');
-        //     resultDiv.className = 'history-result';
-        //     resultDiv.textContent = item.result;
+            const resultDiv = document.createElement('div');
+            resultDiv.className = 'history-result';
+            resultDiv.textContent = item.result.toString();
 
-        //     historyItem.appendChild(expressionDiv);
-        //     historyItem.appendChild(resultDiv);
+            historyItem.appendChild(expressionDiv);
+            historyItem.appendChild(resultDiv);
 
-        //     historyItem.addEventListener('click', () => {
-        //         this.updateDisplay(item.expression);
-        //         this.hasError = false;
-        //     });
+            historyItem.addEventListener('click', () => {
+                this.updateDisplay(item.expression);
+                this.hasError = false;
+            });
 
-        //     this.historyPanel.appendChild(historyItem);
-        // });
+            this.historyPanel.appendChild(historyItem);
+        });
     }
 
     clearHistory() {
-        // this.history.clear();
+        this.history.clear();
         this.updateHistoryPanel();
     }
 
@@ -403,8 +403,6 @@ export class Calculator {
         let expr = this.display.textContent;
         if (expr === "0") return;
 
-        // const operatorChars = ['+', '-', '×', '÷', '%', '(', '^'];
-
         // position where the last operand begins
         let i = expr.length - 1;
 
@@ -464,7 +462,7 @@ export class Calculator {
         this.updateDisplay(formattedResult);
         this.justCalculated = true;
         this.hasError = false;
-        // this.history.add("rand()", formattedResult);
+        this.history.add("rand()", Number(formattedResult));
         this.updateHistoryPanel();
     }
 
