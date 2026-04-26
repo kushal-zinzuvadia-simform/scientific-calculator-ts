@@ -1,10 +1,10 @@
-// import { Expression } from "./expression.ts";
+import { Expression } from "./expression.ts";
 // import { History } from "./History.ts";
 
 export class Calculator {
     display: HTMLElement;
     historyPanel: HTMLElement;
-    // expression: Expression;
+    expression: Expression;
     // history: History;
     justCalculated: boolean;
     hasError: boolean;
@@ -15,7 +15,7 @@ export class Calculator {
     constructor(displayElement: HTMLElement, historyPanel: HTMLElement) {
         this.display = displayElement;
         this.historyPanel = historyPanel;
-        // this.expression = new Expression();
+        this.expression = new Expression();
         // this.history = new History();
         this.justCalculated = false;
         this.hasError = false;
@@ -177,32 +177,32 @@ export class Calculator {
         return parseFloat(value.toFixed(6)).toString();
     }
 
-    // evaluateCurrentExpression() {
-    //     let input = this.display.textContent.trim();
-    //     const result = this.expression.evaluate(input, this.mode);
-    //     if (isNaN(result) || !isFinite(result)) {
-    //         throw new Error("Invalid result");
-    //     }
-    //     return result;
-    // }
+    evaluateCurrentExpression() {
+        let input = this.display.textContent.trim();
+        const result = this.expression.evaluate(input, this.mode);
+        if (isNaN(result) || !isFinite(result)) {
+            throw new Error("Invalid result");
+        }
+        return result;
+    }
 
     calculate() {
         if (this.hasError) return;
 
         try {
             // let input = this.display.textContent.trim();
-            // const result = this.evaluateCurrentExpression();
+            const result = this.evaluateCurrentExpression();
 
-            // if (isNaN(result) || !isFinite(result)) {
-            //     this.updateDisplay(result === Infinity || result === -Infinity ? "Infinite" : "Invalid expression");
-            //     this.hasError = true;
-            //     this.justCalculated = false;
-            //     return;
-            // }
+            if (isNaN(result) || !isFinite(result)) {
+                this.updateDisplay(result === Infinity || result === -Infinity ? "Infinite" : "Invalid expression");
+                this.hasError = true;
+                this.justCalculated = false;
+                return;
+            }
 
-            // const formattedResult = this.formatResult(result);
+            const formattedResult = this.formatResult(result);
 
-            // this.updateDisplay(formattedResult);
+            this.updateDisplay(formattedResult);
             this.justCalculated = true;
 
             // Add to history
