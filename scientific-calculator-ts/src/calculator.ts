@@ -1,6 +1,8 @@
 import { Expression } from "./expression.ts";
 import { History } from "./history.ts";
 
+type CalculatorMode = "DEG" | "RAD";
+
 export class Calculator {
     display: HTMLElement;
     historyPanel: HTMLElement;
@@ -9,7 +11,7 @@ export class Calculator {
     justCalculated: boolean;
     hasError: boolean;
     memory: number;
-    mode: string;
+    mode: CalculatorMode;
     isExponential: boolean;
 
     constructor(displayElement: HTMLElement, historyPanel: HTMLElement) {
@@ -24,24 +26,29 @@ export class Calculator {
         this.isExponential = false;
     }
 
-    getCurrentValue() {
-        const text = this.display.textContent || "0";
+    /** Safely reads display text, never returns null or empty */
+    private getDisplayText(): string {
+        return this.display.textContent ?? "0";
+    }
+
+    getCurrentValue(): number {
+        const text = this.getDisplayText();
         return parseFloat(text) || 0;
     }
 
-    updateDisplay(text: string) {
+    updateDisplay(text: string): void {
         this.display.textContent = text;
     }
 
-    isStartOfNewEntry(value: string) {
+    isStartOfNewEntry(value: string): boolean {
         return /^[0-9.]$/.test(value) || value === "π" || value === "e";
     }
 
-    isOperator(value: string) {
+    isOperator(value: string): boolean {
         return ["+", "-", "×", "÷", "%", "!"].includes(value);
     }
 
-    clearIfError() {
+    clearIfError(): boolean {
         if (this.hasError) {
             this.updateDisplay("0");
             this.hasError = false;
@@ -51,7 +58,7 @@ export class Calculator {
         return false;
     }
 
-    handleMemory(type: "MS" | "MR" | "M+" | "M-" | "MC") {
+    handleMemory(type: "MS" | "MR" | "M+" | "M-" | "MC"): void {
         if (this.hasError) return;
         const value = this.getCurrentValue();
 
@@ -59,12 +66,12 @@ export class Calculator {
             case "MS": this.memory = value; break;
             case "MR": {
                 const memValue = this.formatResult(this.memory);
-                const current = this.display.textContent;
+                const current = this.getDisplayText();
                 const lastChar = current[current.length - 1];
 
                 if (this.justCalculated || current === "0") {
                     this.updateDisplay(memValue);
-                } else if (/[+\-×÷%^(]/.test(lastChar)) {
+                } else if (lastChar && /[+\-×÷%^(]/.test(lastChar)) {
                     this.updateDisplay(current + memValue);
                 } else {
                     this.updateDisplay(memValue);
@@ -79,7 +86,7 @@ export class Calculator {
         }
     }
 
-    append(value: string) {
+    append(value: string): void {
         if (this.hasError) {
             this.clearIfError();
             // For operators after error: start with "0"
@@ -96,12 +103,12 @@ export class Calculator {
             return;
         }
 
-        let currentText = this.display.textContent;
+        const currentText = this.getDisplayText();
         const lastChar = currentText[currentText.length - 1];
         const operatorLike = new Set(["+", "-", "×", "÷", "%", "!", "^"]);
 
         // Prevent consecutive tokens 
-        if (operatorLike.has(value) && operatorLike.has(lastChar)) {
+        if (lastChar && operatorLike.has(value) && operatorLike.has(lastChar)) {
             if (value === lastChar) {
                 return;
             }
@@ -144,18 +151,18 @@ export class Calculator {
         this.justCalculated = false;
     }
 
-    clear() {
+    clear(): void {
         this.updateDisplay("0");
         this.justCalculated = false;
         this.hasError = false;
     }
 
-    delete() {
+    delete(): void {
         if (this.hasError) {
             this.clear();
             return;
         }
-        let currentText = this.display.textContent;
+        const currentText = this.getDisplayText();
         if (currentText.length <= 1) {
             this.updateDisplay("0");
         } else {
@@ -163,7 +170,7 @@ export class Calculator {
         }
     }
 
-    formatResult(value: number) {
+    formatResult(value: number): string {
         if (isNaN(value)) return value.toString();
 
         if (this.isExponential) {
@@ -177,8 +184,8 @@ export class Calculator {
         return parseFloat(value.toFixed(6)).toString();
     }
 
-    evaluateCurrentExpression() {
-        let input = this.display.textContent.trim();
+    evaluateCurrentExpression(): number {
+        const input = this.getDisplayText().trim();
         const result = this.expression.evaluate(input, this.mode);
         if (isNaN(result) || !isFinite(result)) {
             throw new Error("Invalid result");
@@ -186,11 +193,11 @@ export class Calculator {
         return result;
     }
 
-    calculate() {
+    calculate(): void {
         if (this.hasError) return;
 
         try {
-            let input = this.display.textContent.trim();
+            const input = this.getDisplayText().trim();
             const result = this.evaluateCurrentExpression();
 
             if (isNaN(result) || !isFinite(result)) {
@@ -215,7 +222,7 @@ export class Calculator {
         }
     }
 
-    updateHistoryPanel() {
+    updateHistoryPanel(): void {
         if (!this.historyPanel) return;
 
         const items = this.history.getAll();
@@ -253,16 +260,16 @@ export class Calculator {
         });
     }
 
-    clearHistory() {
+    clearHistory(): void {
         this.history.clear();
         this.updateHistoryPanel();
     }
 
     // Common function for unary operations
-    applyUnaryFunction(format: string) {
+    applyUnaryFunction(format: string): void {
         if (this.hasError) return;
 
-        const expr = this.display.textContent;
+        const expr = this.getDisplayText();
         const lastChar = expr[expr.length - 1];
         const isPostfix = format.startsWith("%s");
 
@@ -286,9 +293,9 @@ export class Calculator {
         this.justCalculated = false;
     }
 
-    appendToExpression(suffix: string) {
+    appendToExpression(suffix: string): void {
         if (this.hasError) return;
-        const expr = this.display.textContent;
+        const expr = this.getDisplayText();
         const lastChar = expr[expr.length - 1];
 
         // "^" is only valid after a digit, ")", π, e
@@ -302,7 +309,7 @@ export class Calculator {
         this.justCalculated = false;
     }
 
-    toggleExponential() {
+    toggleExponential(): void {
         this.isExponential = !this.isExponential;
 
         if (this.justCalculated) {
@@ -311,21 +318,21 @@ export class Calculator {
         }
     }
 
-    applySquare() {
+    applySquare(): void {
         this.applyUnaryFunction("(%s)^2");
     }
 
-    applyPower() {
+    applyPower(): void {
         this.appendToExpression("^");
     }
 
-    applyTenPower() {
+    applyTenPower(): void {
         this.applyUnaryFunction("10^(%s)");
     }
 
-    applyReciprocal() {
+    applyReciprocal(): void {
         if (this.hasError) return;
-        const expr = this.display.textContent;
+        const expr = this.getDisplayText();
         if (expr === "0") {
             this.updateDisplay("1/(");
         } else {
@@ -334,73 +341,73 @@ export class Calculator {
         this.justCalculated = false;
     }
 
-    applyAbsolute() {
+    applyAbsolute(): void {
         this.applyUnaryFunction("abs(%s)");
     }
 
-    applySquareRoot() {
+    applySquareRoot(): void {
         this.applyUnaryFunction("√(%s)");
     }
 
-    applyFactorial() {
+    applyFactorial(): void {
         this.applyUnaryFunction("%s!");
     }
 
-    applyLog10() {
+    applyLog10(): void {
         this.applyUnaryFunction("log(%s)");
     }
 
-    applyLn() {
+    applyLn(): void {
         this.applyUnaryFunction("ln(%s)");
     }
 
-    applyExp() {
+    applyExp(): void {
         this.applyUnaryFunction("%s^");
     }
 
-    applyCube() {
+    applyCube(): void {
         this.applyUnaryFunction("(%s)^3");
     }
 
-    applyCubeRoot() {
+    applyCubeRoot(): void {
         this.applyUnaryFunction("∛(%s)");
     }
 
-    applyTwoPower() {
+    applyTwoPower(): void {
         this.applyUnaryFunction("2^(%s)");
     }
 
-    applySin() {
+    applySin(): void {
         this.applyUnaryFunction("sin(%s)");
     }
 
-    applyCos() {
+    applyCos(): void {
         this.applyUnaryFunction("cos(%s)");
     }
 
-    applyTan() {
+    applyTan(): void {
         this.applyUnaryFunction("tan(%s)");
     }
 
-    applyAsin() {
+    applyAsin(): void {
         this.applyUnaryFunction("asin(%s)");
     }
 
-    applyAcos() {
+    applyAcos(): void {
         this.applyUnaryFunction("acos(%s)");
     }
 
-    applyAtan() {
+    applyAtan(): void {
         this.applyUnaryFunction("atan(%s)");
     }
 
     // +/- 
-    applyNegate() {
+    applyNegate(): void {
         if (this.hasError) {
             this.clearIfError();
             return;
         }
-        let expr = this.display.textContent;
+        const expr = this.getDisplayText();
         if (expr === "0") return;
 
         // position where the last operand begins
@@ -429,7 +436,7 @@ export class Calculator {
                 this.updateDisplay(prefix + "-" + operand);
             } else if (prefix.endsWith("-")) {
                 // binary minus 
-                const beforeMinus = prefix.length >= 2 ? prefix[prefix.length - 2] : null;
+                const beforeMinus = prefix.length >= 2 ? prefix[prefix.length - 2] : undefined;
                 if (beforeMinus && /[0-9)πe]/.test(beforeMinus)) {
                     this.updateDisplay(prefix + "(-" + operand + ")");
                 } else {
@@ -448,15 +455,15 @@ export class Calculator {
         }
     }
 
-    applyFloor() {
+    applyFloor(): void {
         this.applyUnaryFunction("floor(%s)");
     }
 
-    applyCeil() {
+    applyCeil(): void {
         this.applyUnaryFunction("ceil(%s)");
     }
 
-    applyRand() {
+    applyRand(): void {
         const result = Math.random();
         const formattedResult = this.formatResult(result);
         this.updateDisplay(formattedResult);
@@ -466,7 +473,7 @@ export class Calculator {
         this.updateHistoryPanel();
     }
 
-    applyRound() {
+    applyRound(): void {
         this.applyUnaryFunction("round(%s)");
     }
 }
