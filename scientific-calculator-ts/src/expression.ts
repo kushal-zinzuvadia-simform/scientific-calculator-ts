@@ -111,8 +111,13 @@ export class Expression {
             }
 
             else if (prefixFunctions.includes(token)) {
-                while (stack.length && this.precedence(stack.at(-1)!) >= this.precedence(token) && stack.at(-1) !== "(") {
-                    output.push(stack.pop()!);
+                while (stack.length) {
+                    const top = stack.at(-1);
+                    if (top && this.precedence(top) >= this.precedence(token) && top !== "(") {
+                        output.push(stack.pop() as string);
+                    } else {
+                        break;
+                    }
                 }
                 stack.push(token);
             }
@@ -122,16 +127,25 @@ export class Expression {
             }
 
             else if ("+-*/%^".includes(token)) {
-                while (stack.length && this.precedence(stack.at(-1)!) >= this.precedence(token)) {
-                    output.push(stack.pop()!);
+                while (stack.length) {
+                    const top = stack.at(-1);
+                    if (top && this.precedence(top) >= this.precedence(token)) {
+                        output.push(stack.pop() as string);
+                    } else {
+                        break;
+                    }
                 }
-
                 stack.push(token);
             }
 
             else if (token === "u-") {
-                while (stack.length && this.precedence(stack.at(-1)!) > this.precedence(token)) {
-                    output.push(stack.pop()!);
+                while (stack.length) {
+                    const top = stack.at(-1);
+                    if (top && this.precedence(top) > this.precedence(token)) {
+                        output.push(stack.pop() as string);
+                    } else {
+                        break;
+                    }
                 }
                 stack.push(token);
             }
@@ -142,7 +156,7 @@ export class Expression {
 
             else if (token === ")") {
                 while (stack.length && stack.at(-1) !== "(") {
-                    output.push(stack.pop()!);
+                    output.push(stack.pop() as string);
                 }
 
                 if (stack.length === 0) {
@@ -174,12 +188,18 @@ export class Expression {
             }
 
             else if (token === "u-") {
-                const a = stack.pop()!;
+                const a = stack.pop();
+                if (a === undefined) {
+                    throw new Error("Invalid expression: insufficient operands for unary minus");
+                }
                 stack.push(-a);
             }
 
             else if (token === "!") {
-                const n = stack.pop()!;
+                const n = stack.pop();
+                if (n === undefined) {
+                    throw new Error("Invalid expression: insufficient operands for factorial");
+                }
                 if (!Number.isInteger(n) || n < 0) {
                     throw new Error("Factorial of negative or non-integer");
                 }
@@ -191,7 +211,10 @@ export class Expression {
             }
 
             else if (prefixFunctions.includes(token)) {
-                const x = stack.pop()!;
+                const x = stack.pop();
+                if (x === undefined) {
+                    throw new Error(`Invalid expression: insufficient operands for function '${token}'`);
+                }
                 let result: number;
 
                 switch (token) {
@@ -266,8 +289,12 @@ export class Expression {
             }
 
             else {
-                const b = stack.pop()!;
-                const a = stack.pop()!;
+                const b = stack.pop();
+                const a = stack.pop();
+
+                if (b === undefined || a === undefined) {
+                    throw new Error("Invalid expression: insufficient operands for binary operator");
+                }
 
                 if (token === "/" && b === 0) {
                     throw new Error("Invalid division by zero");
