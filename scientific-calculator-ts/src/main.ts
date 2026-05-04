@@ -1,5 +1,6 @@
 import './style.css'
 import { Calculator } from "./calculator.ts";
+import { ButtonHandler } from "./button-handler.ts";
 
 const scrollAmount = 30;
 
@@ -18,6 +19,7 @@ const historySidebar = getElement("history-panel");
 const clearHistoryBtn = getElement("clearHistory");
 
 const calculator = new Calculator(display, historyPanel);
+const buttonHandler = new ButtonHandler(calculator);
 
 let outer2ndActive = false;
 const outer2ndBtn = getElement("outer-2nd-btn");
@@ -74,6 +76,7 @@ clearHistoryBtn.addEventListener("click", (e) => {
 outer2ndBtn.addEventListener("click", (e) => {
   e.stopPropagation();
   outer2ndActive = !outer2ndActive;
+  buttonHandler.setOuter2ndActive(outer2ndActive);
   if (outer2ndActive) {
     outer2ndBtn.classList.add("active-2nd");
     squareBtn.textContent = "x³";
@@ -90,6 +93,7 @@ outer2ndBtn.addEventListener("click", (e) => {
 trig2ndBtn.addEventListener("click", (e) => {
   e.stopPropagation();
   trig2ndActive = !trig2ndActive;
+  buttonHandler.setTrig2ndActive(trig2ndActive);
   if (trig2ndActive) {
     trig2ndBtn.classList.add("active-2nd");
     sinBtn.textContent = "sin⁻¹";
@@ -132,95 +136,7 @@ document.body.addEventListener("click", (e) => {
   const btn = (e.target as HTMLElement).closest("button");
   if (!btn) return;
 
-  if (btn.id === "historyToggle" || btn.id === "clearHistory") return;
-  if (btn.id === "outer-2nd-btn" || btn.id === "trig-2nd-btn") return;
-  if (btn.dataset["type"] === "mode") return;
-  if (btn.classList.contains("dropdown-btn")) return;
-
-  let value = btn.innerText;
-
-  if (value === "=") {
-    calculator.calculate();
-    display.focus();
-  } else if (value === "C") {
-    calculator.clear();
-  } else if (value === "MS" || value === "MR" || value === "M+" || value === "M-" || value === "MC") {
-    calculator.handleMemory(value);
-  }
-  else if (btn.getAttribute("aria-label") === "Backspace") {
-    calculator.delete();
-
-  } else if (btn.id === "square-btn") {
-    if (outer2ndActive) {
-      calculator.applyCube();
-    } else {
-      calculator.applySquare();
-    }
-
-  } else if (btn.id === "sqrt-btn") {
-    if (outer2ndActive) {
-      calculator.applyCubeRoot();
-    } else {
-      calculator.applySquareRoot();
-    }
-
-  } else if (btn.id === "power-btn") {
-    if (outer2ndActive) {
-      calculator.applyTwoPower();
-    } else {
-      calculator.applyTenPower();
-    }
-
-  } else if (value === "xʸ") {
-    calculator.applyPower();
-  } else if (value === "1/x") {
-    calculator.applyReciprocal();
-  } else if (value === "|x|") {
-    calculator.applyAbsolute();
-  } else if (value === "n!") {
-    calculator.applyFactorial();
-  } else if (value === "log") {
-    calculator.applyLog10();
-  } else if (value === "ln") {
-    calculator.applyLn();
-  } else if (value === "exp") {
-    calculator.applyExp();
-  } else if (value === "+/-") {
-    calculator.applyNegate();
-  } else if (btn.id === "sin-btn") {
-    if (trig2ndActive) {
-      calculator.applyAsin();
-    } else {
-      calculator.applySin();
-    }
-  } else if (btn.id === "cos-btn") {
-    if (trig2ndActive) {
-      calculator.applyAcos();
-    } else {
-      calculator.applyCos();
-    }
-  } else if (btn.id === "tan-btn") {
-    if (trig2ndActive) {
-      calculator.applyAtan();
-    } else {
-      calculator.applyTan();
-    }
-
-  } else if (value === "⌊x⌋") {
-    calculator.applyFloor();
-  } else if (value === "⌈x⌉") {
-    calculator.applyCeil();
-  } else if (value === "rand") {
-    calculator.applyRand();
-  } else if (value === "round") {
-    calculator.applyRound();
-
-  } else {
-    if (value === "mod") {
-      value = "%";
-    }
-    calculator.append(value);
-  }
+  buttonHandler.handleButtonClick(btn);
 });
 
 // Keyboard input support
