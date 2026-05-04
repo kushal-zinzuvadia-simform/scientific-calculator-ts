@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Scientific Calculator - A scientific calculator is a specialized website for performing complex mathematical, statistical, and scientific calculations.">
+  <meta name="keywords" content="Scientific, Calculator, Mathematical, Statistical">
+
+  <!-- Facebook Meta Tags -->
+  <meta property="og:url" content="https://scientific-calculator-nu-peach.vercel.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Scientific Calculator">
+  <meta property="og:description"
+    content="Scientific Calculator - A scientific calculator is a specialized website for performing complex mathematical, statistical, and scientific calculations.">
+  <meta property="og:image" content="./assets/images/cover_image.png">
+
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="twitter:domain" content="scientific-calculator-nu-peach.vercel.app">
+  <meta property="twitter:url" content="https://scientific-calculator-nu-peach.vercel.app/">
+  <meta name="twitter:title" content="Scientific Calculator">
+  <meta name="twitter:description"
+    content="Scientific Calculator - A scientific calculator is a specialized website for performing complex mathematical, statistical, and scientific calculations.">
+  <meta name="twitter:image" content="./assets/images/cover_image.png">
+
+  <title>Scientific Calculator</title>
+  <link rel="stylesheet" href="./src/style.css">
+  <link rel="icon" href="./src/assets/icons/calculator-icon.svg">
+</head>
+
+<body>
+  <main>
+    <div class="container">
+      <div class="calculator">
+        <!-- Top Bar -->
+        <div class="top-bar">
+          <div class="left">
+            <h3 class="title">Scientific</h3>
+          </div>
+
+          <button id="historyToggle" class="icon-btn" aria-label="Open history">
+            <img src="./src/assets/icons/history-logo.svg" alt="">
+          </button>
+        </div>
+
+        <!-- Display -->
+        <div class="display">
+          <div class="result" id="result-display">0</div>
+        </div>
+
+        <!-- Mode -->
+        <div class="mode-row">
+          <button id="mode-btn" data-type="mode">DEG</button>
+          <button id="fe-btn" data-type="mode">F-E</button>
+        </div>
+
+        <!-- Memory -->
+        <div class="memory-row">
+          <button>MC</button>
+          <button>MR</button>
+          <button>M+</button>
+          <button>M-</button>
+          <button>MS</button>
+        </div>
+
+        <!-- Function Tabs -->
+        <div class="function-tabs">
+
+          <!-- Trigonometry -->
+          <div class="dropdown" id="trig-dropdown">
+            <button class="dropdown-btn" id="trig-dropdown-btn">
+              <img src="./src/assets/icons/trigonometry.svg" aria-hidden="true" alt="">
+              Trigonometry
+              <img src="./src/assets/icons/drop-down.svg" class="arrow" alt="drop-down">
+            </button>
+
+            <div class="dropdown-content" id="trig-dropdown-content">
+              <button id="trig-2nd-btn">2ⁿᵈ</button>
+              <button id="sin-btn">sin</button>
+              <button id="cos-btn">cos</button>
+              <button id="tan-btn">tan</button>
+            </div>
+          </div>
+
+          <!-- Function -->
+          <div class="dropdown" id="func-dropdown">
+            <button class="dropdown-btn" id="func-dropdown-btn">
+              <img src="./src/assets/icons/functions.svg" aria-hidden="true" alt="">
+              Function
+              <img src="./src/assets/icons/drop-down.svg" class="arrow" alt="drop-down">
+            </button>
+
+            <div class="dropdown-content" id="func-dropdown-content">
+              <button>⌊x⌋</button>
+              <button>⌈x⌉</button>
+
+              <button>rand</button>
+              <button>round</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Buttons -->
+        <div class="buttons">
+
+          <button id="outer-2nd-btn">2ⁿᵈ</button>
+          <button>π</button>
+          <button>e</button>
+          <button>C</button>
+          <button aria-label="Backspace">
+            <img src="./src/assets/icons/backspace.svg" alt="backspace">
+          </button>
+
+          <button id="square-btn">x²</button>
+          <button>1/x</button>
+          <button>|x|</button>
+          <button>exp</button>
+          <button>mod</button>
+
+          <button id="sqrt-btn">²√x</button>
+          <button>(</button>
+          <button>)</button>
+          <button>n!</button>
+          <button>÷</button>
+
+          <button>xʸ</button>
+          <button class="primary-btn">7</button>
+          <button class="primary-btn">8</button>
+          <button class="primary-btn">9</button>
+          <button>×</button>
+
+          <button id="power-btn">10ˣ</button>
+          <button class="primary-btn">4</button>
+          <button class="primary-btn">5</button>
+          <button class="primary-btn">6</button>
+          <button>-</button>
+
+          <button>log</button>
+          <button class="primary-btn">1</button>
+          <button class="primary-btn">2</button>
+          <button class="primary-btn">3</button>
+          <button>+</button>
+
+          <button>ln</button>
+          <button class="primary-btn">+/-</button>
+          <button class="primary-btn">0</button>
+          <button class="primary-btn">.</button>
+          <button class="equals">=</button>
+
+        </div>
+      </div>
+
+      <!-- History Panel -->
+      <div id="history-panel" class="history-panel">
+        <div class="history-header">
+          <h4>History</h4>
+          <button id="clearHistory" class="clear-btn" title="Clear history">Clear</button>
+        </div>
+        <div id="history-items" class="history-items">
+          <div class="history-empty">No history</div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
