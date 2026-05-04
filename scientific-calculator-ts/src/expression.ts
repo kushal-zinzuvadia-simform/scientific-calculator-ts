@@ -1,3 +1,5 @@
+import type { CalculatorMode } from "./calculator.ts";
+
 export class Expression {
     private static readonly PREFIX_FUNCTIONS = ["ln", "log", "√", "abs", "sin", "cos", "tan", "asin", "acos", "atan", "floor", "ceil", "round", "∛"];
 
@@ -174,7 +176,7 @@ export class Expression {
         return output.concat(stack.reverse());
     }
 
-    evaluatePostfix(postfix: string[], mode: string): number {
+    evaluatePostfix(postfix: string[], mode: CalculatorMode): number {
         const stack: number[] = [];
         const prefixFunctions = Expression.PREFIX_FUNCTIONS;
 
@@ -337,7 +339,7 @@ export class Expression {
         return result;
     }
 
-    evaluate(expr: string, mode: string = "DEG"): number {
+    evaluate(expr: string, mode: CalculatorMode = "DEG"): number {
         try {
             const tokens = this.tokenize(expr);
             const postfix = this.toPostfix(tokens);

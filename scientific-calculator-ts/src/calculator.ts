@@ -4,7 +4,7 @@ import { DisplayManager } from "./display-manager.ts";
 import { MemoryManager } from "./memory-manager.ts";
 import { HistoryRenderer } from "./history-renderer.ts";
 
-type CalculatorMode = "DEG" | "RAD";
+export type CalculatorMode = "DEG" | "RAD";
 
 export class Calculator {
     private display: DisplayManager;
