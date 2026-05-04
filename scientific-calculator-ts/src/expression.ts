@@ -36,9 +36,8 @@ export class Expression {
 
         // handle implicit multiplication
         const withImplicitMult: string[] = [];
-        for (let i = 0; i < tokens.length; i++) {
-            const token = tokens[i];
-            const nextToken = i < tokens.length - 1 ? tokens[i + 1] : null;
+        for (const [i, token] of tokens.entries()) {
+            const nextToken = tokens[i + 1] ?? null;
 
             withImplicitMult.push(token);
 
@@ -69,12 +68,11 @@ export class Expression {
 
         // handle unary minus
         const processed: string[] = [];
-        for (let i = 0; i < withImplicitMult.length; i++) {
-            const token = withImplicitMult[i];
+        for (const [i, token] of withImplicitMult.entries()) {
             const prevToken = i > 0 ? withImplicitMult[i - 1] : null;
 
             // Check if "-" is unary: at start or after operator or opening paren
-            if (token === "-" && (prevToken === null || "+-*/%(".includes(prevToken))) {
+            if (token === "-" && (prevToken === null || (prevToken && "+-*/%(".includes(prevToken)))) {
                 processed.push("u-"); // Mark as unary minus
             } else {
                 processed.push(token);
@@ -303,7 +301,13 @@ export class Expression {
             }
         });
 
-        return stack[0];
+        const result = stack[0];
+
+        if (result === undefined) {
+            throw new Error("Invalid expression");
+        }
+
+        return result;
     }
 
     evaluate(expr: string, mode: string = "DEG"): number {

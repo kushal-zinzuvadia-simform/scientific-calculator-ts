@@ -119,7 +119,7 @@ export class Calculator {
         // Prevent consecutive decimal 
         if (value === ".") {
             const lastNumberMatch = currentText.match(/(\d*\.?\d*)$/);
-            if (lastNumberMatch && lastNumberMatch[1].includes(".")) {
+            if (lastNumberMatch?.[1]?.includes(".")) {
                 return;
             }
             if (lastChar === ".") {
@@ -327,8 +327,8 @@ export class Calculator {
         let i = expr.length - 1;
 
         // Skip trailing digits/dots
-        if (/[0-9.πe]/.test(expr[i])) {
-            while (i >= 0 && /[0-9.πe]/.test(expr[i])) {
+        if (i >= 0 && /[0-9.πe]/.test(expr[i]!)) {
+            while (i >= 0 && /[0-9.πe]/.test(expr[i]!)) {
                 i--;
             }
 

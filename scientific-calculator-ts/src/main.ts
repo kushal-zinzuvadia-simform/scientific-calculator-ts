@@ -126,7 +126,7 @@ document.body.addEventListener("click", (e) => {
 
   if (btn.id === "historyToggle" || btn.id === "clearHistory") return;
   if (btn.id === "outer-2nd-btn" || btn.id === "trig-2nd-btn") return;
-  if (btn.dataset.type === "mode") return;
+  if (btn.dataset["type"] === "mode") return;
   if (btn.classList.contains("dropdown-btn")) return;
 
   let value = btn.innerText;
